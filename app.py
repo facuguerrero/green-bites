@@ -27,7 +27,7 @@ def calculate_points():
     products = data.get('products')
 
     total_points = points_calculation(products)
-    return jsonify({"icon": "dh:customer-assets-glovo/pintxo/icons/default/foreground/leaf.svg", "total_points": total_points}), 200
+    return jsonify({"icon": "dh:customer-assets-glovo/pintxo/icons/default/foreground/leaf.svg", "text": "You'll get " +str(total_points)+ " green bites"}), 200
 
 
 
