@@ -14,7 +14,31 @@ def create_tables():
 @app.route('/points', methods=['POST'])
 def create_points():
     print("POST /points endpoint was called")
-    return {"message": "Points created successfully"}, 201
+
+    # Get data from the JSON request
+    data = request.get_json()
+    customer_id = data.get('customer_id')
+    order_id = data.get('order_id')
+    points = data.get('points')
+
+    # Validate the input data
+    if not customer_id or not order_id or not isinstance(points, int):
+        return {"error": "Invalid input data"}, 400
+
+    # Create a new session and add the new Point entry
+    session = SessionLocal()
+    try:
+        new_point = Point(customer_id=customer_id, order_id=order_id, points=points)
+        session.add(new_point)
+        session.commit()
+        session.refresh(new_point)  # Refresh to get the new ID if needed
+        return jsonify({"message": "Points created successfully", "id": new_point.id}), 201
+    except Exception as e:
+        session.rollback()
+        print("An error occurred:", e)
+        return {"error": "Failed to create points entry"}, 500
+    finally:
+        session.close()
 
 @app.route('/points', methods=['GET'])
 def get_points():
