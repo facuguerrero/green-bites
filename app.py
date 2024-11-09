@@ -48,7 +48,7 @@ def get_points():
 
     # Convert query results to a list of dictionaries for JSON response
     points_data = [
-        {"customer_id": point.customer_id, "points": total_points}
+        {"customer_id": customer_id, "points": total_points}
     ]
 
     return jsonify(points_data), 200
